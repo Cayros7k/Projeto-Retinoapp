@@ -3,8 +3,10 @@ import os
 from keras.preprocessing import image
 import numpy as np
 import tensorflow as tf
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def home():
@@ -34,27 +36,38 @@ def read_image(filename):
     return x
 
 @app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = file.filename
-            file_path = os.path.join(target_img, filename)
-            file.save(file_path)
-            img = read_image(file_path)
-            predictions = model.predict(img)
-            class_index = np.argmax(predictions, axis=1)[0]
-            class_names = ['leuko', 'normal']  # Substitua pelos seus nomes de classe
-            predicted_class = class_names[class_index]
-            confidence = predictions[0][class_index]
-            os.remove(file_path)
-            return jsonify({
-                "predicted_class": predicted_class,
-                "confidence": float(confidence),
-                "user_image": file_path
-            })
-        else:
-            return jsonify({"error": "Unable to read the file. Please check file extension"})
+  if request.method == 'POST':
+    try:
+      # Print entire request object
+      print(f"Request headers: {request.headers}")
+      print(f"Request data: {request.data}")
+      print(f"Request files: {request.files}")
+      file = request.files['file']
+      #if file and allowed_file(file.filename):
+      filename = file.filename
+      file_path = os.path.join(target_img, filename)
+      file.save(file_path)
+      img = read_image(file_path)
+      predictions = model.predict(img)
+      class_index = np.argmax(predictions, axis=1)[0]
+      class_names = ['leuko', 'normal']  # Substitua pelos seus nomes de classe
+      predicted_class = class_names[class_index]
+      confidence = predictions[0][class_index]
+      os.remove(file_path)
+      return jsonify({
+        "predicted_class": predicted_class,
+        "confidence": float(confidence),
+        "user_image": file_path
+      })
+      #else:
+        #return jsonify({"error": "Unable to read the file. Please check file extension"})
+    except Exception as e:
+      # Catch any other unexpected errors
+      return jsonify({"error": f"An error occurred: {str(e)}"})
+  else:
+    return jsonify({"error": "Invalid request method. Please use POST."})
 
-if __name__ == '__main__':
+if __name__ == '_main_':
     app.run(debug=True, use_reloader=False, port=8000)
