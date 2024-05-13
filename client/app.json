@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Cancer-Detection-App",
-    "slug": "Cancer-Detection-App",
+    "name": "rbapp",
+    "slug": "rbapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

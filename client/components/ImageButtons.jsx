@@ -1,114 +1,86 @@
-import React, { useState } from "react";
-import { View, Pressable, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
-function ImageButtons({ image, setImage }) {  // Define o componente ImageButtons com duas props: image e setImage
-  const [cameraPermission, setCameraPermission] = useState(true);  // Define um estado para verificar a permissão da câmera
-  const [galleryPermission, setGalleryPermission] = useState(true);  // Define um estado para verificar a permissão da galeria
+function ImageButtons({ image, setImage }) {
+  const [cameraPermission, setCameraPermission] = useState(null);
+  const [galleryPermission, setGalleryPermission] = useState(null);
 
-<<<<<<< HEAD
-  const grabFromLibrary = async () => {  // Função assíncrona para selecionar uma imagem da galeria
-    const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();  // Solicita permissão para acessar a galeria
-    if (galleryStatus.status == "granted") {  // Verifica se a permissão foi concedida
-      let result = await ImagePicker.launchImageLibraryAsync({  // Abre a galeria para selecionar uma imagem
-=======
-  const grabFromLibrary = async () => {
-    const galleryStatus =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (galleryStatus.status == "granted") {
-      let result = await ImagePicker.launchImageLibraryAsync({
->>>>>>> parent of 491784e (Processing image method changed on the server)
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
+  useEffect(() => {
+    (async () => {
+      const camera = await ImagePicker.getCameraPermissionsAsync();
+      const gallery = await ImagePicker.getMediaLibraryPermissionsAsync();
+      setCameraPermission(camera.status === "granted");
+      setGalleryPermission(gallery.status === "granted");
+    })();
+  }, []);
 
-      console.log(result);
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {  // Verifica se a seleção de imagem não foi cancelada
-        setImage(result.assets[0].uri);  // Define a imagem selecionada no estado
-      }
-    } else {
-      setGalleryPermission(false);  // Define false para indicar que a permissão da galeria não foi concedida
-    }
+  const requestPermission = async (permissionType) => {
+    const permission = permissionType === "camera" ? await ImagePicker.requestCameraPermissionsAsync() : await ImagePicker.requestMediaLibraryPermissionsAsync();
+    return permission.status === "granted";
   };
 
-  const grabFromCamera = async () => {  // Função assíncrona para tirar uma foto com a câmera
-    const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();  // Solicita permissão para acessar a câmera
-    if (cameraStatus.status == "granted") {  // Verifica se a permissão foi concedida
-      let result = await ImagePicker.launchCameraAsync({  // Abre a câmera para tirar uma foto
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {  // Verifica se a captura de imagem não foi cancelada
-        setImage(result.assets[0].uri);  // Define a imagem capturada no estado
-      }
+  const handlePress = async (source) => {
+    let permission;
+    if (source === "camera") {
+      permission = cameraPermission || (await requestPermission("camera"));
     } else {
-      setCameraPermission(false);  // Define false para indicar que a permissão da câmera não foi concedida
+      permission = galleryPermission || (await requestPermission("gallery"));
+    }
+
+    if (!permission) {
+      Alert.alert("Permission required", `You need to grant access to the ${source}`, [{ text: "OK" }]);
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
     }
   };
 
   return (
-    <View
-      style={image ? [styles.buttonsPosition] : [styles.buttonsWithoutImage]}  // Define o estilo com base na presença ou ausência de uma imagem
-    >
-      <View style={styles.buttonsWrapper}> 
-        <Pressable style={styles.button} onPress={grabFromCamera}> 
-          <View style={styles.buttonContent}>
-            <Text style={styles.buttonText}>
-              {image ? "Tirar outra foto" : "Tirar uma foto"}
-            </Text>
-            <Ionicons name="camera-outline" size={24} color="white" /> 
-          </View>
-        </Pressable>
-        <Pressable style={styles.button} onPress={grabFromLibrary}> 
-          <View style={styles.buttonContent}>
-            <Text style={styles.buttonText}>
-              {image ? "Selecionar outra imagem" : "Selecionar uma imagem"} 
-            </Text>
-            <MaterialIcons name="upload-file" size={24} color="white" /> 
-          </View>
-        </Pressable>
-      </View>
-      {!cameraPermission && (  // Exibe uma mensagem de erro se a permissão da câmera não foi concedida
-        <Text style={styles.errorText}>
-          Você precisa conceder acesso à câmera
-        </Text>
-      )}
-      {!galleryPermission && (  // Exibe uma mensagem de erro se a permissão da galeria não foi concedida
-        <Text style={styles.errorText}>
-          Você precisa conceder acesso à galeria
-        </Text>
-      )}
+    <View style={[styles.buttonsContainer, image ? styles.withImage : styles.withoutImage]}>
+      <TouchableOpacity style={styles.button} onPress={() => handlePress("camera")}>
+        <View style={styles.buttonContent}>
+          <Text style={styles.buttonText}>{image ? "Retake a picture" : "Take a picture"}</Text>
+          <Ionicons name="camera-outline" size={24} color="white" />
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => handlePress("gallery")}>
+        <View style={styles.buttonContent}>
+          <Text style={styles.buttonText}>{image ? "Reupload an image" : "Upload an image"}</Text>
+          <MaterialIcons name="upload-file" size={24} color="white" />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonsWithoutImage: {  // Estilo para o componente quando não há imagem
+  buttonsContainer: {
     position: "absolute",
-    top: "240%",
-    left: "45%",
+    top: 10,
+    left: "50%",
     transform: [{ translateX: -115 }],
-  },
-  buttonsPosition: {  // Estilo para o componente quando há uma imagem
-    left: "29%",
-    top: "5%",
-    display: "flex",
-    justifyContent: "center",
-    transform: [{ translateX: -115 }],
-  },
-  buttonsWrapper: {  // Estilo para o envoltório dos botões
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  button: {  // Estilo para os botões
+  withImage: {
+    top: "5%",
+  },
+  withoutImage: {
+    top: "240%",
+  },
+  button: {
     backgroundColor: "#4a90e2",
     padding: 20,
     borderRadius: 5,
@@ -116,17 +88,15 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
   },
-  buttonContent: {  // Estilo para o conteúdo dos botões
+  buttonContent: {
     flexDirection: "row",
     alignItems: "center",
   },
-  buttonText: {  // Estilo para o texto dos botões
+  buttonText: {
     color: "white",
     marginRight: 5,
   },
-  errorText: {  // Estilo para a mensagem de erro
-    color: "red",
-  },
 });
 
-export default ImageButtons;  // Exporta o componente ImageButtons
+export default ImageButtons;
+  

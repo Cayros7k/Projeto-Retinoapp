@@ -1,39 +1,35 @@
 import React from "react";
-import { View, StyleSheet, Pressable, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import axios from "axios";
 
 function SendButton({ image, prediction, setPrediction }) {
   const sendToServer = async () => {
-<<<<<<< HEAD
     try {
       const formData = new FormData();
       formData.append('file', {
         uri: image.uri,
-        type: "image/jpeg",
-        name: "test.jpg",
-=======
-    axios
-      .post("http://127.0.0.1:8000/predict/", formData)
-      .then((response) => {
-        setPrediction(response);
-      })
-      .catch((error) => {
-        console.error(error);
->>>>>>> parent of 491784e (Processing image method changed on the server)
+        type: 'image/jpeg',
+        name: 'test.jpg',
       });
 
-      const response = await axios.post("http://127.0.0.1:8000/predict", formData);
-      setPrediction(response.data); // Corrija para acessar os dados da resposta
+      const response = await axios.post("http://localhost:8000/predict", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setPrediction(response.data);
     } catch (error) {
-      console.error("Error sending image:", error);
+      console.error("Erro ao enviar a imagem:", error);
     }
   };
 
   return (
     <View style={styles.sendWrapper}>
-      <Pressable style={styles.button} onPress={sendToServer}>
-        <Text style={styles.buttonText}>Scan the image</Text> 
-      </Pressable>
+      <TouchableOpacity style={styles.button} onPress={sendToServer}>
+        <Text style={styles.buttonText}>Scan the image</Text>
+      </TouchableOpacity>
     </View>
   );
 }
