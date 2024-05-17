@@ -3,7 +3,7 @@ import { Image, View, StyleSheet, Alert, Platform } from 'react-native';
 import { Button, Provider as PaperProvider } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library'; // Corrigido aqui
+import * as MediaLibrary from 'expo-media-library';
 
 export default function App() {
   return (
