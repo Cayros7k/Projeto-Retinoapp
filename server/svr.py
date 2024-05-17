@@ -46,11 +46,11 @@ def predict():
             class_index = np.argmax(predictions, axis=1)[0]
             class_names = ['leuko', 'normal']  # Substitua pelos seus nomes de classe
             predicted_class = class_names[class_index]
-            confidence = predictions[0][class_index]
+            confidence = predictions[0][class_index] * 10
             os.remove(file_path)
             return jsonify({
                 "predicted_class": predicted_class,
-                "confidence": float(confidence),
+                "confidence": "{:.2f}%".format(confidence),
                 "user_image": file_path
             })
         else:
