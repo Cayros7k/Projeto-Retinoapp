@@ -36,4 +36,10 @@ O Expo é um ecossistema completo de ferramentas, baseado em react-native, que a
 ``` pip install -r requirements.txt ```
 
 
+## NGROK
+
+O ngrok é uma ferramenta que cria um túnel seguro entre uma porta local em seu computador e uma porta pública na internet. Isso permite que você compartilhe temporariamente um serviço ou aplicativo localmente hospedado, dando a outros acesso a ele pela internet. É útil para desenvolvedores que desejam testar ou demonstrar seu trabalho sem a necessidade de hospedar em servidores públicos.
+
+> Link para Download: https://ngrok.com/download
+
 
