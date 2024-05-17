@@ -6,33 +6,33 @@ Este projeto automatiza a detecção do Retinoblastoma, tornando o pré-diagnós
 
 O Expo é um ecossistema completo de ferramentas, baseado em react-native, que ajuda você a escrever, construir, atualizar, submeter e monitorar seus apps móveis.
 
-*** Criando um projeto EXPO ***
+> Criando um projeto EXPO
 ``` npx create-expo-app 'example' --template blank```
 ``` cd example ```
 
-*** Iniciando o projeto ***
+> Iniciando o projeto
 ``` npx expo start ```
 
 ### DEPENDÊNCIAS
 
-*** Instalando dependencias ***
+> Instalando dependencias
 ``` npx expo install react-dom react-native-web @expo/metro-runtime ```
 
 ### BIBLIOTECAS
 
-*** ImagePicker ***
+> ImagePicker 
 ``` npx expo install expo-image-picker ```
 
-*** FileSystem ***
+> FileSystem
 ``` npx expo install expo-file-system ```
 
-*** PaperProvider ***
+> PaperProvider
 ``` npm install react-native-paper ```
 
 
 ## BIBLIOTECAS PYTHON
 
-*** Baixar todas as bibliotecas ***
+> Baixar todas as bibliotecas
 ``` pip install -r requirements.txt ```
 
 
