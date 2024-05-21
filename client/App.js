@@ -139,7 +139,7 @@ function ImagePickerExample({ setImage, setResult, setIndex }) {
 
       // Envia a imagem selecionada para o servidor
       const response = await FileSystem.uploadAsync(
-        "https://7e70-2804-d45-e08d-9100-c4c9-f921-4937-1047.ngrok-free.app/predict",
+        "https://fe7a-189-50-3-114.ngrok-free.app/predict",
         // URI da imagem selecionada
         imageUri,
         {
@@ -193,7 +193,7 @@ function ResultScreen({ image, result }) {
 
 const styles = StyleSheet.create({
   appbar: {
-    backgroundColor: '#000',
+    backgroundColor: '#1C1C1C',
   },
   appbarTitle: {
     color: '#ffffff',
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   button: {
-    backgroundColor: '#000',
+    backgroundColor: '#2F4F4F',
     marginBottom: 16,
   },
   buttonLabel: {
@@ -239,6 +239,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   bottomNavigation: {
-    backgroundColor: '#000',
+    backgroundColor: '#1C1C1C',
   },
 });

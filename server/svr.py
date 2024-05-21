@@ -15,7 +15,7 @@ model = tf.keras.models.load_model("./model/modelo_treinado.keras")
 img_height = 180
 img_width = 180
 
-target_img = os.path.join(os.getcwd(), 'server', 'images')
+target_img = os.path.join(os.getcwd(), 'images')
 
 if not os.path.exists(target_img):
     os.makedirs(target_img)
