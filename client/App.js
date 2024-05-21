@@ -139,7 +139,7 @@ function ImagePickerExample({ setImage, setResult, setIndex }) {
 
       // Envia a imagem selecionada para o servidor
       const response = await FileSystem.uploadAsync(
-        "https://fe7a-189-50-3-114.ngrok-free.app/predict",
+        "https://d9fe-2804-d45-e08d-9100-592d-2c98-432-4adc.ngrok-free.app/predict",
         // URI da imagem selecionada
         imageUri,
         {

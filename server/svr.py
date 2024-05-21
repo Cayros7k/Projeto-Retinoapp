@@ -33,6 +33,10 @@ def read_image(filename):
     x = np.expand_dims(x, axis=0)
     return x
 
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis=1, keepdims=True)
+
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -41,16 +45,27 @@ def predict():
             filename = file.filename
             file_path = os.path.join(target_img, filename)
             file.save(file_path)
+
+            # Lê a imagem e faz a predição
             img = read_image(file_path)
             predictions = model.predict(img)
+
+            predictions = softmax(predictions)
+
+            # Obtém o índice da classe com a maior probabilidade
             class_index = np.argmax(predictions, axis=1)[0]
-            class_names = ['leuko', 'normal']  # Substitua pelos seus nomes de classe
+
+            # Define os nomes das classes
+            class_names = ['retinoblastoma', 'normal']
             predicted_class = class_names[class_index]
+
+             # Obtém a confiança da classe prevista
             confidence = predictions[0][class_index] * 10
+
             os.remove(file_path)
             return jsonify({
                 "predicted_class": predicted_class,
-                "confidence": "{:.2f}%".format(confidence),
+                "confidence": f"{confidence * 10:.2f}%",
                 "user_image": file_path
             })
         else:
