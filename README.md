@@ -1,6 +1,6 @@
 # DETECÇÃO DE LEUCOCORIA UTILIZANDO REDES NEURAIS CONVOLUCIONAIS
 
-Este projeto automatiza a detecção do Retinoblastoma, tornando o pré-diagnóstico mais acessível e prático. Utilizando Inteligência Artificial, especialmente Redes Neurais Convolucionais (CNNs), ele facilita a ação proativa das famílias e fornece insights valiosos para profissionais de saúde, melhorando os resultados clínicos e destacando o impacto da IA na saúde.
+Este projeto automatiza a detecção do Leucocoria, um dos sintomas do câncer retinoblastoma, tornando o pré-diagnóstico mais acessível e prático. Utilizando Inteligência Artificial, especialmente Redes Neurais Convolucionais (CNNs), ele facilita a ação proativa das famílias e fornece insights valiosos para profissionais de saúde, melhorando os resultados clínicos e destacando o impacto da IA na saúde.
 
 ## EXPO
 
